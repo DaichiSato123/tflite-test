@@ -158,7 +158,7 @@
   <!--画像URL変更時処理-->
   <script>
     $('input#imgSrc').on('keyup', function(elem){
-      var val = $(elem).val();
+      var val = $('input#imgSrc').val();
       $('img#targetImg').attr('src', val);
     });
   </script>

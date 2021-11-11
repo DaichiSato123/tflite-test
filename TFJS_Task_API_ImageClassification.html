@@ -8,18 +8,21 @@
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@tensorflow-models/tasks@0.0.1-alpha.8"></script>
 </head>
 <body style="width:100%;">  
-  <div class="d-flex">
-    <div>
+  <header>
+    <h1>画像分類テスト</h1>
+  </header>
+  <div class="row">
+    <div class="col-md-6">
       <div class="input-group mb-3">
         <div class="input-group-prepend">
           <span class="input-group-text" id="basic-addon1">画像URL</span>
         </div>
         <input type="text" class="form-control" placeholder="https://xxx/image.jpg" aria-label="Username" aria-describedby="basic-addon1"
-               name="imgSrc" id="imgSrc">
+               name="imgSrc" id="imgSrc" value="https://storage.googleapis.com/tfweb/demos/static/wine.jpeg"/>
       </div>
       <img src="https://storage.googleapis.com/tfweb/demos/static/wine.jpeg" crossorigin="anonymous" id="targetImg" style="width:100%;"/>
     </div>
-    <div class="buttons">
+    <div class="col-md-6">
       <div class="model tfjs-cpu">
         <div class="btn disabled btn-secondary">TFJS (cpu)</div>
         <div class="result"></div>

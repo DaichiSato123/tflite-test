@@ -1,0 +1,191 @@
+<head>
+  <title>TFJS Task API ImageClassification</title>
+</head>
+<body>
+  <style>
+  body {
+    font-family: 'Google Sans';
+  }
+
+  .container {
+    display: flex;
+  }
+
+  .buttons {
+    margin-left: 20px;
+  }
+
+  .model {
+    display: flex;
+    align-items: center;
+  }
+
+  .result {
+    margin-left: 20px;
+  }
+
+  .btn {
+    border: 1px solid #888;
+    cursor: pointer;
+    width: 150px;
+    height: 32px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 10px 0;
+  }
+
+  .btn.disabled {
+    color: #bbb;
+    border-color: #bbb;
+    pointer-events: none;
+  }
+
+  .btn:hover {
+    background-color: #eee;
+  }
+
+  img {
+    width: 400px;
+    border-radius: 8px;
+  }
+  </style>
+  
+  <div class="container">
+    <img src="https://storage.googleapis.com/tfweb/demos/static/wine.jpeg" crossorigin="anonymous">
+    <div class="buttons">
+      <div class="model tfjs-cpu">
+        <div class="btn disabled">TFJS (cpu)</div>
+        <div class="result"></div>
+      </div>
+      <div class="model tfjs-webgl">
+        <div class="btn disabled">TFJS (webgl)</div>
+        <div class="result"></div>
+      </div>
+      <div class="model tfjs-wasm">
+        <div class="btn disabled">TFJS (wasm)</div>
+        <div class="result"></div>
+      </div>
+      <div class="model tflite">
+        <div class="btn disabled">TFLite (mobilenet)</div>
+        <div class="result"></div>
+      </div>
+      <div class="model tflite-custom">
+        <div class="btn disabled">TFLite (custom)</div>
+        <div class="result"></div>
+      </div>
+      <div class="model tflite-custom2">
+        <div class="btn disabled">TFLite (custom)2</div>
+        <div class="result"></div>
+      </div>
+    </div>
+  </div>  
+  
+  <!--js-->
+  <script>
+    const img = document.querySelector('img');
+    let lastModel;
+    let lastClassName;
+    let warmedUp = false;
+
+    setupButton(
+      "tfjs-cpu",
+      async () =>
+        await tfTask.ImageClassification.MobileNet.TFJS.load({
+          backend: "cpu",
+          version: 2,
+          alpha: 1.0
+        }),
+    );
+
+    setupButton(
+      "tfjs-webgl",
+      async () =>
+        await tfTask.ImageClassification.MobileNet.TFJS.load({
+          backend: "webgl",
+          version: 2,
+          alpha: 1.0
+        }),
+      true
+    );
+
+    setupButton(
+      "tfjs-wasm",
+      async () =>
+        await tfTask.ImageClassification.MobileNet.TFJS.load({
+          backend: "wasm",
+          version: 2,
+          alpha: 1.0
+        }),
+    );
+
+    setupButton(
+      "tflite",
+      async () =>
+        await tfTask.ImageClassification.MobileNet.TFLite.load({
+          version: 2,
+          alpha: 1.0,
+          maxResults: 1,
+        }),
+    );
+
+    setupButton(
+      "tflite-custom",
+      async () =>
+        await tfTask.ImageClassification.CustomModel.TFLite.load({
+          model: 'https://storage.googleapis.com/tfweb/models/mobilenet_v2_1.0_224_1_metadata_1.tflite',
+          maxResults: 1,
+        }),
+    );
+
+    setupButton(
+      "tflite-custom2",
+      async () =>
+        await tfTask.ImageClassification.CustomModel.TFLite.load({
+          model: 'https://github.com/DaichiSato123/tomato_leaf_sick_image_classfication/raw/main/20211026_054714/new_mobile_model.tflite',
+          maxResults: 1,
+        }),
+    );
+
+
+    async function setupButton(className, modelCreateFn, needWarmup) {
+      document
+        .querySelector(`.model.${className} .btn`)
+        .classList.remove("disabled");
+      const resultEle = document.querySelector(`.model.${className} .result`);
+      document
+        .querySelector(`.model.${className} .btn`)
+        .addEventListener("click", async () => {
+          let model;
+          // Create the model when user clicks on a button.
+          if (lastClassName !== className) {
+            // Clean up the previous model if existed.
+            if (lastModel) {
+              lastModel.cleanUp();
+            }
+            // Create the new model and save it.
+            resultEle.textContent = "Loading...";
+            model = await modelCreateFn();
+            lastModel = model;
+            lastClassName = className;
+          }
+          // Reuse the model if user clicks on the same button.
+          else {
+            model = lastModel;
+          }
+
+          // Warm up if needed.
+          if (needWarmup && !warmedUp) {
+            await model.predict(img);
+            warmedUp = true;
+          }
+
+          // Run inference and update result.
+          const start = Date.now();
+          const result = await model.predict(img);
+          const latency = Date.now() - start;
+          resultEle.textContent = `${result.classes[0].className} (${result.classes[0].score.toFixed(3)}). Inference took ${latency} ms.`;
+        });
+    }
+  </script>
+</body>

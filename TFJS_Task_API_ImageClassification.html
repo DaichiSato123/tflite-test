@@ -7,7 +7,7 @@
   <!-- tensorflow models -->
   <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@tensorflow-models/tasks@0.0.1-alpha.8"></script>
 </head>
-<body>  
+<body style="width:100%;">  
   <div class="d-flex">
     <div>
       <div class="input-group mb-3">
@@ -17,31 +17,31 @@
         <input type="text" class="form-control" placeholder="https://xxx/image.jpg" aria-label="Username" aria-describedby="basic-addon1"
                name="imgSrc" id="imgSrc">
       </div>
-      <img src="https://storage.googleapis.com/tfweb/demos/static/wine.jpeg" crossorigin="anonymous" id="targetImg" />
+      <img src="https://storage.googleapis.com/tfweb/demos/static/wine.jpeg" crossorigin="anonymous" id="targetImg" style="width:100%;"/>
     </div>
     <div class="buttons">
       <div class="model tfjs-cpu">
-        <div class="btn disabled">TFJS (cpu)</div>
+        <div class="btn disabled btn-secondary">TFJS (cpu)</div>
         <div class="result"></div>
       </div>
       <div class="model tfjs-webgl">
-        <div class="btn disabled">TFJS (webgl)</div>
+        <div class="btn disabled btn-secondary">TFJS (webgl)</div>
         <div class="result"></div>
       </div>
       <div class="model tfjs-wasm">
-        <div class="btn disabled">TFJS (wasm)</div>
+        <div class="btn disabled btn-secondary">TFJS (wasm)</div>
         <div class="result"></div>
       </div>
       <div class="model tflite">
-        <div class="btn disabled">TFLite (mobilenet)</div>
+        <div class="btn disabled btn-secondary">TFLite (mobilenet)</div>
         <div class="result"></div>
       </div>
       <div class="model tflite-custom">
-        <div class="btn disabled">TFLite (custom)</div>
+        <div class="btn disabled btn-secondary">TFLite (custom)</div>
         <div class="result"></div>
       </div>
       <div class="model tflite-custom2">
-        <div class="btn disabled">TFLite (custom)2</div>
+        <div class="btn disabled btn-secondary">TFLite (custom)2</div>
         <div class="result"></div>
       </div>
     </div>
